@@ -14,6 +14,26 @@ https://quote.eastmoney.com/center/boardlist.html#boards-BK0477
 
 ```python
 def getLinesData(code: str, id: str):
+    params = f"fltt=1&"\
+             "invt=2&"\
+             "fields=f14%2Cf12%2Cf13%2Cf3%2Cf152%2Cf4%2Cf128%2Cf140%2Cf141&"\
+             f"secid={code}.{id}&"\
+             "ut=fa5fd1943c7b386f172d6893dbfba10b&"\
+             "pi=0&"\
+             "po=1&"\
+             "np=1&"\
+             "pz=5&"\
+             "spt=3"
+
+    res = session.get("http://push2.eastmoney.com/api/qt/slist/get", params=params)
+    data = json.loads(res.text)
+    result = data["data"]["diff"]
+    concept = []
+    for item in result:
+        concept.append(item["f14"])
+    return concept
+
+
 
 参数
 code: 证券代码（字符串类型）。
