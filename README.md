@@ -125,4 +125,4 @@ def main():
             print("股票" + stock["id"]+"爬取成功")
 ```
 ### 通过抓包获取股票对应编号id
-![image]([01.png](https://github.com/XJHSYMON/DFCF-spider/blob/main/picture/02.png))
+![image](https://github.com/XJHSYMON/DFCF-spider/blob/main/picture/02.png)
