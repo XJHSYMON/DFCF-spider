@@ -34,6 +34,7 @@ def getLinesData(code: str, id: str):
     return concept
 
 
+```
 
 ## get请求携带的参数
 fields1: 包含一组字段 f1 到 f13，这些字段可能表示某种数据的类型或属性。
