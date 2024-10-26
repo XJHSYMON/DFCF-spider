@@ -1,8 +1,12 @@
+https://quote.eastmoney.com
+东方财富网
+
 https://quote.eastmoney.com/bk/90.BK0477.html#fullScreenChart
 酿酒行业K线图
 
 https://quote.eastmoney.com/center/boardlist.html#boards-BK0477
 酿酒行业
+
 
 # 获取K线数据
 
@@ -55,3 +59,28 @@ def getLinesData(code: str, id: str):
 
 - **fqt**: 前复权类型，值为 `1`，可能指示数据是经过前复权处理的。
 
+## 打包为xlxs文件
+
+```python
+def getxlsx(code: str, id: str):
+    cur_dir = os.path.dirname(__file__)
+    res = pd.DataFrame(columns=(
+    "股票代码", "股票简称", "日期", "开盘", "收盘", "最高", "最低", "涨跌幅(%)", "涨跌额", "成交量", "成交额", "振幅(%)",
+    "换手率(%)", "行业", "地区", "概念1", "概念2", "概念3", "概念4"))
+
+    linesData = getLinesData(code, id)
+    concept = getConcept(code, id)
+    companyData = getCompanyData(code, id)
+    # 计数
+    count = 1
+    for item in linesData:
+        newArr = item.split(',')
+        count = count + 1
+        # 行业 地区 概念
+        res.loc[count] = [id, companyData[1], newArr[0], newArr[1], newArr[2], newArr[3], newArr[4], newArr[8],
+                          newArr[9], newArr[5], newArr[6], newArr[7], newArr[10],
+                          concept[0], companyData[0], concept[1], concept[2], concept[3], concept[4]]
+
+    res.to_excel(os.path.join(cur_dir, id + ".xlsx"))
+
+```
