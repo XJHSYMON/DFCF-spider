@@ -41,6 +41,7 @@ def getLinesData(code: str, id: str):
 ```
 
 ## get请求携带的参数
+- **
 - **fields1**: 包含一组字段 `f1` 到 `f13`，这些字段可能表示某种数据的类型或属性。
 
 - **fields2**: 包含另一组字段 `f51` 到 `f61`，可能表示另一类数据或属性。
@@ -58,6 +59,32 @@ def getLinesData(code: str, id: str):
 - **klt**: K线类型，值为 `101`，可能表示某种特定的K线图类型。
 
 - **fqt**: 前复权类型，值为 `1`，可能指示数据是经过前复权处理的。
+
+## 获取股票List
+```python
+def getStockList(title: str):
+    # pz可以调整爬取股票的数量
+    params = "pn=1&"\
+             "pz=60&"\
+             "po=1&"\
+             "np=1&"\
+             "ut=bd1d9ddb04089700cf9c27f6f7426281&"\
+             "fltt=2&"\
+             "invt=2&"\
+             "wbp2u=|0|0|0|web&"\
+             "fid=f3&"\
+             f"fs=b:{title}+f:!50&"\
+             "fields=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152,f45&"\
+
+    res = session.get("http://83.push2.eastmoney.com/api/qt/clist/get", params=params)
+    result = json.loads(res.text)
+    lists = result["data"]["diff"]
+    data = []
+    for item in lists:
+        stockObj = {"code": item["f13"], "id": item["f12"]}
+        data.append(stockObj)
+    return data
+```
 
 ## 打包为xlxs文件
 
@@ -84,3 +111,18 @@ def getxlsx(code: str, id: str):
     res.to_excel(os.path.join(cur_dir, id + ".xlsx"))
 
 ```
+##  main函数定义
+```python
+def main():
+    stocks = getStockList("BK0477")
+    for stock in stocks:
+        try:
+            getxlsx(str(stock["code"]), stock["id"])
+        except Exception as e:
+            print("爬取失败,错误股票代码" + stock["id"], e)
+            continue
+        else:
+            print("股票" + stock["id"]+"爬取成功")
+```
+### 通过抓包获取股票对应编号id
+
